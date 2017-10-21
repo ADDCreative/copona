@@ -30,3 +30,15 @@ services:
       - db
     links:
       - "db:database"
+#      - redis
+#      - memcached
+
+#  redis:
+#    image: redis:alpine
+#    ports:
+#      - "6379:6379"
+#
+#  memcached:
+#    image: memcached:alpine
+#    ports:
+#      - "11211:11211"
