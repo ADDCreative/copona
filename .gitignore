@@ -160,3 +160,5 @@ error_log
 !.gitignore
 /admin/language/.gitignore
 /catalog/language/.gitignore
+
+.mysql/
