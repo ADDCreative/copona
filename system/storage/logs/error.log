@@ -1,0 +1,14 @@
+2017-07-02 15:13:02 - PHP Notice:  Undefined index: banner_id in /app/catalog/controller/extension/module/slideshow.php on line 15
+2017-07-02 15:13:02 - PHP Notice:  Undefined index: limit in /app/catalog/controller/extension/module/featured.php on line 27
+2017-07-02 15:13:02 - PHP Notice:  Undefined index: banner_id in /app/catalog/controller/extension/module/carousel.php on line 15
+2017-07-02 15:13:09 - PHP Notice:  Undefined index: banner_id in /app/catalog/controller/extension/module/slideshow.php on line 15
+2017-07-02 15:13:09 - PHP Notice:  Undefined index: limit in /app/catalog/controller/extension/module/featured.php on line 27
+2017-07-02 15:13:09 - PHP Notice:  Undefined index: banner_id in /app/catalog/controller/extension/module/carousel.php on line 15
+2017-07-02 15:15:52 - PHP Notice:  Undefined index: banner_id in /app/catalog/controller/extension/module/slideshow.php on line 15
+2017-07-02 15:15:52 - PHP Notice:  Undefined index: limit in /app/catalog/controller/extension/module/featured.php on line 27
+2017-07-02 15:15:52 - PHP Notice:  Undefined index: banner_id in /app/catalog/controller/extension/module/carousel.php on line 15
+2017-07-02 15:21:46 - PHP Unknown:  Object of class ControllerExtensionModuleSlideshow could not be converted to string in /app/system/engine/action.php on line 55
+2017-07-02 15:22:03 - PHP Unknown:  Object of class ControllerExtensionModuleSlideshow could not be converted to string in /app/system/engine/action.php on line 55
+2017-07-02 15:22:12 - PHP Unknown:  Object of class ControllerExtensionModuleSlideshow could not be converted to string in /app/system/engine/action.php on line 55
+2017-07-02 16:01:40 - PHP Warning:  is_file(): Unable to find the wrapper &quot;xdebug&quot; - did you forget to enable it when you configured PHP? in /app/vendor/filp/whoops/src/Whoops/Exception/Frame.php on line 123
+2017-07-02 16:01:40 - PHP Warning:  is_file(): Unable to find the wrapper &quot;xdebug&quot; - did you forget to enable it when you configured PHP? in /app/vendor/filp/whoops/src/Whoops/Exception/Frame.php on line 123
