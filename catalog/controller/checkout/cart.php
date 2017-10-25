@@ -58,7 +58,7 @@ class ControllerCheckoutCart extends Controller {
 
             $data['products'] = array();
 
-            $products = $this->cart->cartProducts; 
+            $products = $this->cart->cartProducts;
 
             foreach ($products as $product) {
                 $product_total = 0;
@@ -102,10 +102,10 @@ class ControllerCheckoutCart extends Controller {
 
                 // Display prices
                 if ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {
-                    $unit_price = $this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax'));
+                    $unit_price = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency'], false, false);
 
-                    $price = $this->currency->format($unit_price, $this->session->data['currency']);
-                    $total = $this->currency->format($unit_price * $product['quantity'], $this->session->data['currency']);
+                    $price = $this->currency->format($unit_price, $this->session->data['currency'], 1.0);
+                    $total = $this->currency->format($unit_price * $product['quantity'], $this->session->data['currency'], 1.0);
                 } else {
                     $price = false;
                     $total = false;
@@ -123,13 +123,13 @@ class ControllerCheckoutCart extends Controller {
                     );
 
                     if ($product['recurring']['trial']) {
-                        $recurring = sprintf($this->language->get('text_trial_description'), $this->currency->format($this->tax->calculate($product['recurring']['trial_price'] * $product['quantity'], $product['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']), $product['recurring']['trial_cycle'], $frequencies[$product['recurring']['trial_frequency']], $product['recurring']['trial_duration']) . ' ';
+                        $recurring = sprintf($this->language->get('text_trial_description'), $this->currency->format($this->currency->format($this->tax->calculate($product['recurring']['trial_price'], $product['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency'], false, false) * $product['quantity'], $this->session->data['currency'], 1.0), $product['recurring']['trial_cycle'], $frequencies[$product['recurring']['trial_frequency']], $product['recurring']['trial_duration']) . ' ';
                     }
 
                     if ($product['recurring']['duration']) {
-                        $recurring .= sprintf($this->language->get('text_payment_description'), $this->currency->format($this->tax->calculate($product['recurring']['price'] * $product['quantity'], $product['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']), $product['recurring']['cycle'], $frequencies[$product['recurring']['frequency']], $product['recurring']['duration']);
+                        $recurring .= sprintf($this->language->get('text_payment_description'), $this->currency->format($this->currency->format($this->tax->calculate($product['recurring']['price'], $product['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency'], false, false) * $product['quantity'], $this->session->data['currency'], 1.0), $product['recurring']['cycle'], $frequencies[$product['recurring']['frequency']], $product['recurring']['duration']);
                     } else {
-                        $recurring .= sprintf($this->language->get('text_payment_cancel'), $this->currency->format($this->tax->calculate($product['recurring']['price'] * $product['quantity'], $product['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']), $product['recurring']['cycle'], $frequencies[$product['recurring']['frequency']], $product['recurring']['duration']);
+                        $recurring .= sprintf($this->language->get('text_payment_cancel'), $this->currency->format($this->currency->format($this->tax->calculate($product['recurring']['price'], $product['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency'], false, false) * $product['quantity'], $this->session->data['currency'], 1.0), $product['recurring']['cycle'], $frequencies[$product['recurring']['frequency']], $product['recurring']['duration']);
                     }
                 }
 
@@ -211,7 +211,7 @@ class ControllerCheckoutCart extends Controller {
                 array_multisort($sort_order, SORT_ASC, $totals);
             }
 
-            $data['totals'] = array(); 
+            $data['totals'] = array();
 
             foreach ($totals as $total) {
                 $data['totals'][] = array(

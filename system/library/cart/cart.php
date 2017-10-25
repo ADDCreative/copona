@@ -15,6 +15,7 @@ class Cart {
         $this->tax = $registry->get('tax');
         $this->weight = $registry->get('weight');
         $this->hook = $registry->get('hook');
+        $this->currency = $registry->get('currency');
 
         // Remove all the expired carts with no customer ID
         $this->db->query("DELETE FROM " . DB_PREFIX . "cart WHERE (api_id > '0' OR customer_id = '0') AND date_added < DATE_SUB(NOW(), INTERVAL 1 HOUR)");
@@ -347,10 +348,21 @@ class Cart {
         $total = 0;
 
         foreach ($this->cartProducts as $product) {
-            $total += $product['total'];
+            $unit_price = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency'], false, false);
+            $tax = 0;
+
+            if ($product['tax_class_id'] && $this->config->get('config_tax')) {
+                $tax_rates = $this->tax->getRates($product['price'], $product['tax_class_id']);
+
+                foreach ($tax_rates as $tax_rate) {
+                    $tax += $this->currency->format($tax_rate['amount'], $this->session->data['currency'], false, false);
+                }
+            }
+
+            $total += $this->currency->format(($unit_price - $tax) * $product['quantity'], $this->session->data['currency'], 1.0, false);
         }
 
-        return $total;
+        return $this->currency->convert($total, $this->session->data['currency'], $this->config->get('config_currency'));
     }
 
     public function getTaxes() {
@@ -358,15 +370,21 @@ class Cart {
 
         foreach ($this->cartProducts as $product) {
             if ($product['tax_class_id']) {
-                $tax_rates = $this->tax->getRates($product['total'], $product['tax_class_id']);
+                $tax_rates = $this->tax->getRates($product['price'], $product['tax_class_id']);
 
                 foreach ($tax_rates as $tax_rate) {
                     if (!isset($tax_data[$tax_rate['tax_rate_id']])) {
-                        $tax_data[$tax_rate['tax_rate_id']] = ($tax_rate['amount']);
+                        $tax_data[$tax_rate['tax_rate_id']] = ($this->currency->format($tax_rate['amount'], $this->session->data['currency'], false, false) * $product['quantity']);
                     } else {
-                        $tax_data[$tax_rate['tax_rate_id']] += ($tax_rate['amount']);
+                        $tax_data[$tax_rate['tax_rate_id']] += ($this->currency->format($tax_rate['amount'], $this->session->data['currency'], false, false) * $product['quantity']);
                     }
                 }
+            }
+        }
+
+        foreach ($tax_rates as $tax_rate) {
+            if (isset($tax_data[$tax_rate['tax_rate_id']])) {
+                $tax_data[$tax_rate['tax_rate_id']] = $this->currency->convert($tax_data[$tax_rate['tax_rate_id']], $this->session->data['currency'], $this->config->get('config_currency'));
             }
         }
 
