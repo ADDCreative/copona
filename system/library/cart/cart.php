@@ -382,10 +382,8 @@ class Cart {
             }
         }
 
-        foreach ($tax_rates as $tax_rate) {
-            if (isset($tax_data[$tax_rate['tax_rate_id']])) {
-                $tax_data[$tax_rate['tax_rate_id']] = $this->currency->convert($tax_data[$tax_rate['tax_rate_id']], $this->session->data['currency'], $this->config->get('config_currency'));
-            }
+        foreach ($tax_data as $key => $value) {
+            $tax_data[$key] = $this->currency->convert($value, $this->session->data['currency'], $this->config->get('config_currency'));
         }
 
         return $tax_data;
